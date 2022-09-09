@@ -12,9 +12,9 @@ import (
 func Start() {
 	fmt.Printf("Starting new server")
 	//wiring
-	ch := CustomerHandler{service.NewCustomerService(domain.NewCustomerRespositoryStub())}
+	// ch := CustomerHandler{service.NewCustomerService(domain.NewCustomerRespositoryStub())}
+	ch1 := CustomerHandler{service.NewCustomerService(domain.NewCustomerRespositoryDb())}
 	router := mux.NewRouter()
-	router.HandleFunc("/getcustomers", ch.getAllCustomer).Methods(http.MethodGet)
-
-	http.ListenAndServe("localhost:5056", router)
+	router.HandleFunc("/getcustomers", ch1.getAllCustomer).Methods(http.MethodGet)
+	http.ListenAndServe("localhost:5057", router)
 }
