@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.banking/sardarmd/app/errs"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/data/azcosmos"
 )
@@ -15,9 +16,7 @@ type CustomerRepositoryDb struct {
 	cosmoClient  *azcosmos.Client
 	partitionKey *azcosmos.PartitionKey
 	container    *azcosmos.ContainerClient
-	customers    []Customer
 }
-
 
 func (db *CustomerRepositoryDb) CreateDatabase() {
 
@@ -71,26 +70,32 @@ func (db *CustomerRepositoryDb) AddCustomerToDb() any {
 
 }
 
-func (db *CustomerRepositoryDb) FindCustomerById(id string) Customer {
+func (db CustomerRepositoryDb) FindById(id string) (*Customer, *errs.AppErrors) {
 
 	itemResponse, err := db.container.ReadItem(context.Background(), *db.partitionKey, id, nil)
 	if err != nil {
+
 		var responseErr *azcore.ResponseError
 		errors.As(err, &responseErr)
-		panic(responseErr)
+
+		if responseErr.ErrorCode == "NotFound" {
+			return nil, errs.NewNotFoundError()
+		} else {
+			return nil, errs.NewUnexpectedError()
+		}
+
 	}
 
 	var customer Customer
 
 	err = json.Unmarshal(itemResponse.Value, &customer)
 
-	fmt.Printf(" Response value  %s", customer.Name)
-
 	if err != nil {
-		panic(err)
+		return nil, errs.NewUnexpectedError()
+
 	}
 
-	return customer
+	return &customer, nil
 
 }
 
@@ -141,6 +146,6 @@ func NewCustomerRespositoryDb() CustomerRepositoryDb {
 
 	pk := azcosmos.NewPartitionKeyString("/premium")
 
-	return CustomerRepositoryDb{Client, &pk, container, nil}
+	return CustomerRepositoryDb{Client, &pk, container}
 
 }
