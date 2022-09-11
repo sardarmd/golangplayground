@@ -1,16 +1,17 @@
 package app
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.banking/sardarmd/app/domain"
 	"github.banking/sardarmd/app/service"
+	"github.banking/sardarmd/logger"
 	"github.com/gorilla/mux"
 )
 
 func Start() {
-	fmt.Printf("Starting new server")
+
+	logger.Info("Starting server")
 	//wiring
 	// ch := CustomerHandler{service.NewCustomerService(domain.NewCustomerRespositoryStub())}
 	ch1 := CustomerHandler{service.NewCustomerService(domain.NewCustomerRespositoryDb())}

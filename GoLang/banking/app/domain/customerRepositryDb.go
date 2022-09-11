@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.banking/sardarmd/app/errs"
+	"github.banking/sardarmd/logger"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/data/azcosmos"
 )
@@ -79,8 +80,10 @@ func (db CustomerRepositoryDb) FindById(id string) (*Customer, *errs.AppErrors) 
 		errors.As(err, &responseErr)
 
 		if responseErr.ErrorCode == "NotFound" {
+			logger.Error("Customer not found in Database")
 			return nil, errs.NewNotFoundError()
 		} else {
+			logger.Error("Unexpected error occured in finding customer")
 			return nil, errs.NewUnexpectedError()
 		}
 
