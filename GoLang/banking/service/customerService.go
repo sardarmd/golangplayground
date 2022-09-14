@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.banking/sardarmd/app/domain"
-	"github.banking/sardarmd/app/errs"
+	"github.banking/sardarmd/domain"
 	"github.banking/sardarmd/dto"
+	"github.banking/sardarmd/errs"
 )
 
 type CustomerService interface {

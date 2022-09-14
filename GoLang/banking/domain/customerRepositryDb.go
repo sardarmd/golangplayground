@@ -5,9 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"os"
 
-	"github.banking/sardarmd/app/errs"
+	"github.banking/sardarmd/errs"
 	"github.banking/sardarmd/logger"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/data/azcosmos"
@@ -19,58 +18,6 @@ type CustomerRepositoryDb struct {
 	container    *azcosmos.ContainerClient
 }
 
-func (db *CustomerRepositoryDb) CreateDatabase() {
-
-	database := azcosmos.DatabaseProperties{ID: "customerDb"}
-	response, err := db.cosmoClient.CreateDatabase(context.Background(), database, nil)
-	handle(err)
-
-	fmt.Printf("Database created. ctivityId %s", response.ActivityID)
-
-	if err != nil {
-		var responseErr *azcore.ResponseError
-		errors.As(err, &responseErr)
-		panic(responseErr)
-	}
-
-	if err != nil {
-		panic(err)
-	}
-	if err != nil {
-		var responseErr *azcore.ResponseError
-		errors.As(err, &responseErr)
-		panic(responseErr)
-	}
-
-	fmt.Printf("Container created. ActivityId %s", db.container.ID())
-}
-
-func (db *CustomerRepositoryDb) AddCustomerToDb() any {
-
-	item := map[string]string{
-		"id":          "88",
-		"value":       `"name":"kasim", "value":"65" `,
-		"customerKey": "/premium",
-	}
-
-	marshalled, err := json.Marshal(item)
-	if err != nil {
-		panic(err)
-	}
-
-	itemResponse, err := db.container.CreateItem(context.Background(), *db.partitionKey, marshalled, nil)
-	if err != nil {
-		var responseErr *azcore.ResponseError
-		errors.As(err, &responseErr)
-		panic(responseErr)
-	}
-
-	fmt.Printf("Item created. ActivityId %s consuming %v RU", itemResponse.ActivityID, itemResponse.RequestCharge)
-	handle(err)
-	return nil
-
-}
-
 func (db CustomerRepositoryDb) FindById(id string) (*Customer, *errs.AppErrors) {
 
 	itemResponse, err := db.container.ReadItem(context.Background(), *db.partitionKey, id, nil)
@@ -80,7 +27,7 @@ func (db CustomerRepositoryDb) FindById(id string) (*Customer, *errs.AppErrors) 
 		errors.As(err, &responseErr)
 
 		if responseErr.ErrorCode == "NotFound" {
-			logger.Error("Customer not found in Database")
+			logger.Error("Customer not found in Database for id: " + id)
 			return nil, errs.NewNotFoundError()
 		} else {
 			logger.Error("Unexpected error occured in finding customer")
@@ -133,22 +80,9 @@ func (db CustomerRepositoryDb) FindAll() ([]Customer, error) {
 func handle(err any) {
 
 }
-func NewCustomerRespositoryDb() CustomerRepositoryDb {
-	var key = os.Getenv("AZURE_COSMOS_KEY")
-	var endPoint = os.Getenv("AZURE_COSMOS_ENDPOINT")
 
-	var Cred, err = azcosmos.NewKeyCredential(key)
+func NewCustomerRespositoryDb(client azcosmos.Client, partitionKey azcosmos.PartitionKey, container azcosmos.ContainerClient) CustomerRepositoryDb {
 
-	var Client, _ = azcosmos.NewClientWithKey(endPoint, Cred, nil)
-
-	container, err := Client.NewContainer("customerDb", "customerContainer")
-
-	if err != nil {
-		panic(err)
-	}
-
-	pk := azcosmos.NewPartitionKeyString("/premium")
-
-	return CustomerRepositoryDb{Client, &pk, container}
+	return CustomerRepositoryDb{&client, &partitionKey, &container}
 
 }

@@ -2,25 +2,52 @@ package app
 
 import (
 	"net/http"
+	"os"
 
-	"github.banking/sardarmd/app/domain"
-	"github.banking/sardarmd/app/service"
+	"github.banking/sardarmd/domain"
 	"github.banking/sardarmd/logger"
+	"github.banking/sardarmd/service"
+	"github.com/Azure/azure-sdk-for-go/sdk/data/azcosmos"
 	"github.com/gorilla/mux"
 )
 
 func Start() {
 
 	logger.Info("Starting server")
+
 	//wiring
-	// ch := CustomerHandler{service.NewCustomerService(domain.NewCustomerRespositoryStub())}
-	ch1 := CustomerHandler{service.NewCustomerService(domain.NewCustomerRespositoryDb())}
+	client, pk, container := getDbClient()
+
+	ch := CustomerHandler{service.NewCustomerService(domain.NewCustomerRespositoryDb(*client, *pk, *container))}
+	ah := AccountHandler{service.NewAccountService(domain.NewAccountRespositoryDb(*client, *pk, *container))}
+
 	router := mux.NewRouter()
 
 	//Defining the Routes
-	router.HandleFunc("/getcustomers", ch1.getAllCustomer).Methods(http.MethodGet)
-	router.HandleFunc("/getcustomers/{customer_id:[0-9]+}", ch1.getCustomer).Methods(http.MethodGet)
+	router.HandleFunc("/customers", ch.getAllCustomer).Methods(http.MethodGet)
+	router.HandleFunc("/customers/{customer_id}", ch.getCustomer).Methods(http.MethodGet)
+	router.HandleFunc("/customers/{customer_id:[0-9]+}/account", ah.createCustomer).Methods(http.MethodPost)
 
 	//Listening to the port
-	http.ListenAndServe("localhost:5058", router)
+	http.ListenAndServe("localhost:5059", router)
+}
+
+func getDbClient() (*azcosmos.Client, *azcosmos.PartitionKey, *azcosmos.ContainerClient) {
+	var key = os.Getenv("AZURE_COSMOS_KEY")
+	var endPoint = os.Getenv("AZURE_COSMOS_ENDPOINT")
+
+	var Cred, err = azcosmos.NewKeyCredential(key)
+
+	var Client, _ = azcosmos.NewClientWithKey(endPoint, Cred, nil)
+
+	container, err := Client.NewContainer("customerDb", "customerContainer")
+
+	if err != nil {
+		panic(err)
+	}
+
+	pk := azcosmos.NewPartitionKeyString("/premium")
+
+	return Client, &pk, container
+
 }

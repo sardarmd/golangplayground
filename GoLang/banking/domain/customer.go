@@ -1,13 +1,14 @@
 package domain
 
 import (
-	"github.banking/sardarmd/app/errs"
 	"github.banking/sardarmd/dto"
+	"github.banking/sardarmd/errs"
 )
 
 type Customer struct {
 	Id          string `json:"id"`
 	Name        string `json:"full_name"`
+	CustomerId  string `json:"customer_id"`
 	City        string `json:"city"`
 	Zip_code    string `json:"zip_code"`
 	DateofBirth string `json:"dob"`
