@@ -5,7 +5,7 @@ import (
 
 	"github.banking/sardarmd/domain/accounts"
 	"github.banking/sardarmd/dto"
-	"github.banking/sardarmd/errs"
+	"github.com/sardarmd/banking-lib/errs"
 )
 
 type AccountService interface {

@@ -4,7 +4,7 @@ import (
 	"github.banking/sardarmd/domain/customers"
 	domain "github.banking/sardarmd/domain/customers"
 	"github.banking/sardarmd/dto"
-	"github.banking/sardarmd/errs"
+	"github.com/sardarmd/banking-lib/errs"
 )
 
 // go: genarate mockgen -destination=../mocks/service/mockCustomerService.go  -package= service github.banking/sardarmd/service CustomerService

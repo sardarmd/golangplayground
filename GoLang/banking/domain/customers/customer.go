@@ -2,7 +2,7 @@ package customers
 
 import (
 	"github.banking/sardarmd/dto"
-	"github.banking/sardarmd/errs"
+	"github.com/sardarmd/banking-lib/errs"
 )
 
 type Customer struct {

@@ -6,10 +6,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.banking/sardarmd/errs"
-	"github.banking/sardarmd/logger"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/data/azcosmos"
+	"github.com/sardarmd/banking-lib/errs"
+	"github.com/sardarmd/banking-lib/logger"
 )
 
 type CustomerRepositoryDb struct {

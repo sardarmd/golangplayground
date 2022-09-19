@@ -1,45 +1,45 @@
 package service
 
-import (
-	"testing"
+// import (
+// 	"testing"
 
-	"github.banking/sardarmd/dto"
-	mockaccounts "github.banking/sardarmd/mocks/domain/accounts"
-	"github.com/golang/mock/gomock"
-)
+// 	"github.banking/sardarmd/dto"
+// 	// mockaccounts "github.banking/sardarmd/mocks/domain/accounts"
+// 	"github.com/golang/mock/gomock"
+// )
 
-var mockRepo *mockaccounts.MockAccountRepository
+// var mockRepo *mockaccounts.MockAccountRepository
 
-// var accountService AccountService
+// // var accountService AccountService
 
-func setup(t *testing.T) func() {
+// func setup(t *testing.T) func() {
 
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-	mockRepo = mockaccounts.NewMockAccountRepository(ctrl)
-	// NewAccountService(mockRepo)
+// 	ctrl := gomock.NewController(t)
+// 	defer ctrl.Finish()
+// 	// mockRepo = mockaccounts.NewMockAccountRepository(ctrl)
+// 	// NewAccountService(mockRepo)
 
-	return func() {
-		// accountService = nil
-		defer ctrl.Finish()
-	}
+// 	return func() {
+// 		// accountService = nil
+// 		defer ctrl.Finish()
+// 	}
 
-}
+// }
 
-func Test_Should_return_validation_error_when_request_not_validate(t *testing.T) {
-	//Arrange
-	setup(t)
+// func Test_Should_return_validation_error_when_request_not_validate(t *testing.T) {
+// 	//Arrange
+// 	setup(t)
 
-}
+// }
 
-// --------------------------------------------------------------------------------------------------------------------------
-//                                      Helper functions
-// ---------------------------------------------------------------------------------------------------------------------------
+// // --------------------------------------------------------------------------------------------------------------------------
+// //                                      Helper functions
+// // ---------------------------------------------------------------------------------------------------------------------------
 
-func NewAccountRequest() *dto.NewAccountRequest {
-	request := dto.NewAccountRequest{
-		CustomerId: "", AccountType: "saving",
-		Amount: 0,
-	}
-	return &request
-}
+// func NewAccountRequest() *dto.NewAccountRequest {
+// 	request := dto.NewAccountRequest{
+// 		CustomerId: "", AccountType: "saving",
+// 		Amount: 0,
+// 	}
+// 	return &request
+// }

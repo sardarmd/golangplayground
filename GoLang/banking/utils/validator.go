@@ -2,7 +2,7 @@ package validator
 
 import (
 	"github.banking/sardarmd/dto"
-	"github.banking/sardarmd/errs"
+	"github.com/sardarmd/banking-lib/errs"
 )
 
 func ValidateNewAccount(r dto.NewAccountRequest) *errs.AppErrors {

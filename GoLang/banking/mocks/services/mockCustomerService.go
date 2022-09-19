@@ -9,8 +9,8 @@ import (
 
 	customers "github.banking/sardarmd/domain/customers"
 	dto "github.banking/sardarmd/dto"
-	errs "github.banking/sardarmd/errs"
 	gomock "github.com/golang/mock/gomock"
+	errs "github.com/sardarmd/banking-lib/errs"
 )
 
 // MockCustomerService is a mock of CustomerService interface.

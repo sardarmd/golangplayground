@@ -2,7 +2,7 @@ package accounts
 
 import (
 	"github.banking/sardarmd/dto"
-	"github.banking/sardarmd/errs"
+	"github.com/sardarmd/banking-lib/errs"
 )
 
 type Account struct {

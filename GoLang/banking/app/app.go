@@ -7,10 +7,10 @@ import (
 	"github.banking/sardarmd/domain/accounts"
 	"github.banking/sardarmd/domain/customers"
 
-	"github.banking/sardarmd/logger"
 	"github.banking/sardarmd/service"
 	"github.com/Azure/azure-sdk-for-go/sdk/data/azcosmos"
 	"github.com/gorilla/mux"
+	"github.com/sardarmd/banking-lib/logger"
 )
 
 func Start() {
