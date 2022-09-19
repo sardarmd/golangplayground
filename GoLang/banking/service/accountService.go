@@ -3,7 +3,7 @@ package service
 import (
 	"time"
 
-	"github.banking/sardarmd/domain"
+	"github.banking/sardarmd/domain/accounts"
 	"github.banking/sardarmd/dto"
 	"github.banking/sardarmd/errs"
 )
@@ -13,12 +13,12 @@ type AccountService interface {
 }
 
 type DefaultAccountService struct {
-	repo domain.AccountRepoistryDb
+	repo accounts.AccountRepoistryDb
 }
 
 func (s DefaultAccountService) AddCustomer(req dto.NewAccountRequest) (*dto.NewAccountResponse, *errs.AppErrors) {
 
-	account := domain.Account{
+	account := accounts.Account{
 		Id:          time.Now().Local().String(),
 		CustomerId:  req.CustomerId,
 		OpeningDate: time.Now().Format("2016-01-02 14:02:05"),
@@ -38,6 +38,6 @@ func (s DefaultAccountService) AddCustomer(req dto.NewAccountRequest) (*dto.NewA
 
 }
 
-func NewAccountService(repository domain.AccountRepoistryDb) DefaultAccountService {
+func NewAccountService(repository accounts.AccountRepoistryDb) DefaultAccountService {
 	return DefaultAccountService{repository}
 }

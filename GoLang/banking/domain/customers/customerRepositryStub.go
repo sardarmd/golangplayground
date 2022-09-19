@@ -1,4 +1,4 @@
-package domain
+package customers
 
 type CustomerRepositoryStub struct {
 	customers []Customer

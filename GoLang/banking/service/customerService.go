@@ -1,13 +1,15 @@
 package service
 
 import (
-	"github.banking/sardarmd/domain"
+	"github.banking/sardarmd/domain/customers"
+	domain "github.banking/sardarmd/domain/customers"
 	"github.banking/sardarmd/dto"
 	"github.banking/sardarmd/errs"
 )
 
+// go: genarate mockgen -destination=../mocks/service/mockCustomerService.go  -package= service github.banking/sardarmd/service CustomerService
 type CustomerService interface {
-	GetAllCustomer() ([]domain.Customer, error)
+	GetAllCustomer() ([]customers.Customer, error)
 	GetCustomer(string) (*dto.CustomerResponse, *errs.AppErrors)
 }
 

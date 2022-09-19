@@ -4,7 +4,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.banking/sardarmd/domain"
+	"github.banking/sardarmd/domain/accounts"
+	"github.banking/sardarmd/domain/customers"
+
 	"github.banking/sardarmd/logger"
 	"github.banking/sardarmd/service"
 	"github.com/Azure/azure-sdk-for-go/sdk/data/azcosmos"
@@ -18,8 +20,8 @@ func Start() {
 	//wiring
 	client, pk, container := getDbClient()
 
-	ch := CustomerHandler{service.NewCustomerService(domain.NewCustomerRespositoryDb(*client, *pk, *container))}
-	ah := AccountHandler{service.NewAccountService(domain.NewAccountRespositoryDb(*client, *pk, *container))}
+	ch := CustomerHandler{service.NewCustomerService(customers.NewCustomerRespositoryDb(*client, *pk, *container))}
+	ah := AccountHandler{service.NewAccountService(accounts.NewAccountRespositoryDb(*client, *pk, *container))}
 
 	router := mux.NewRouter()
 

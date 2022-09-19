@@ -1,4 +1,4 @@
-package domain
+package accounts
 
 import (
 	"github.banking/sardarmd/dto"
@@ -15,6 +15,7 @@ type Account struct {
 	CustomerKey string `json:"customerKey"`
 }
 
+//go:generate mockgen -destination=./mocks/domain/accounts/mockAccountRepository.go  -package=accounts github.banking/sardarmd/domain/accounts AccountRepository
 type AccountRepository interface {
 	CreateCustomer(account Account) (*Account, *errs.AppErrors)
 }
